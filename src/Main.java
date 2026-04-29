@@ -89,13 +89,13 @@ class SimpleMultiplication {
             long duration = endTime - startTime; // duration in nanoseconds
 
             // Print n, opCount, and time
-            System.out.println(n + "\t " + opCount); //"\t /" + duration);
+            System.out.println(n + "\t" + opCount);// + "\t" + duration);
         }
     }
 
     // Helper method to generate a random number with n digits
     public static String generateRandomNumber(int n) {
-        Random rand = new Random();
+        Random rand = new Random(42);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < n; i++) {
             // First digit shouldn't be 0 if you want exactly n digits

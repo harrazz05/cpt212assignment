@@ -13,45 +13,59 @@ public class Karatsuba {
     static OpCounter simpleCounter = new OpCounter();
     static OpCounter karatsubaCounter = new OpCounter();
 
-    // --- PART 1: Simple Multiplication Algorithm [cite: 9, 33] ---
+    // --- PART 1: Simple Multiplication Algorithm (Modified with provided logic) ---
     public static BigInteger simpleMultiply(BigInteger x, BigInteger y, boolean printSteps) {
         String s1 = x.toString();
         String s2 = y.toString();
-        int n = s1.length();
-        BigInteger totalSum = BigInteger.ZERO;
-        simpleCounter.add(1); // Assignment [cite: 34]
+        int n1_len = s1.length(); // Length of first number
+        int n2_len = s2.length(); // Length of second number
+        BigInteger totalSum = BigInteger.ZERO; simpleCounter.add(1); // Assignment
 
-        // Step 1: Multiply each digit and keep track of carriers [cite: 11]
-        for (int i = n - 1; i >= 0; i--) {
-            int digit2 = s2.charAt(i) - '0';
-            StringBuilder partialStr = new StringBuilder();
-            StringBuilder carrierStr = new StringBuilder();
-            int carrier = 0;
+        // Outer loop for multiplier (s2) - Step 1
+        for (int i = n2_len - 1; i >= 0; i--) { // Iterate over digits of s2
+            simpleCounter.add(1); // Loop overhead
+            int digit2 = s2.charAt(i) - '0'; simpleCounter.add(1);
 
-            for (int j = n - 1; j >= 0; j--) {
-                int digit1 = s1.charAt(j) - '0';
-                int prod = digit1 * digit2 + carrier;
-                simpleCounter.add(2); // Multiplication + Addition [cite: 34]
+            StringBuilder currentPartial = new StringBuilder();
+            StringBuilder currentCarriersForPrint = new StringBuilder(); // Store carriers for printing
+            int carrier = 0; simpleCounter.add(1);
 
-                partialStr.insert(0, prod % 10);
-                carrier = prod / 10;
-                carrierStr.insert(0, carrier);
-                simpleCounter.add(2); // Modulo + Division [cite: 34]
+            // Inner loop for multiplicand (s1)
+            for (int j = n1_len - 1; j >= 0; j--) { // Iterate over digits of s1
+                simpleCounter.add(1); // Loop overhead
+                int digit1 = s1.charAt(j) - '0'; simpleCounter.add(1);
+
+                int product = (digit1 * digit2) + carrier; simpleCounter.add(2); // Multi + Add
+                int partial = product % 10; simpleCounter.add(1); // Modulo
+                carrier = product / 10; simpleCounter.add(1);    // Division
+
+                currentPartial.insert(0, partial);
+                currentCarriersForPrint.insert(0, carrier); // Store carriers for printing
             }
 
-            // Step 2: Add up shifted partial products [cite: 13]
-            BigInteger partialRow = new BigInteger(partialStr.toString());
-            int shift = (n - 1 - i);
-            BigInteger shiftedRow = partialRow.multiply(BigInteger.TEN.pow(shift));
-            totalSum = totalSum.add(shiftedRow);
-            simpleCounter.add(3);
-
-
-            if (printSteps && n <= 10) {
-                System.out.println("Multiplier Digit " + digit2 + " | Partials: " + partialStr + " | Carriers: " + carrierStr);
+            // Print for small numbers
+            if (printSteps && n1_len <= 10) {
+                System.out.println("multiplier digit: " + digit2);
+                System.out.println("partial products: " + currentPartial);
+                System.out.println("carriers:         " + currentCarriersForPrint);
             }
+
+            // Step 2: Shifting and Adding
+            BigInteger rowValue = calculateRowValueForSimpleMultiply(currentPartial.toString(), carrier, n2_len - 1 - i);
+            simpleCounter.add(1); // Method call overhead
+            totalSum = totalSum.add(rowValue); simpleCounter.add(1);
         }
         return totalSum;
+    }
+
+    // Helper method for simpleMultiply to calculate row value
+    private static BigInteger calculateRowValueForSimpleMultiply(String partials, int finalCarrier, int shift) {
+        simpleCounter.add(1); // Comparison
+        String res = (finalCarrier > 0 ? finalCarrier : "") + partials;
+        simpleCounter.add(1); // String concatenation / assignment
+        BigInteger val = new BigInteger(res); simpleCounter.add(1);
+        BigInteger shiftedVal = val.multiply(BigInteger.TEN.pow(shift)); simpleCounter.add(2); // Pow + Multiply
+        return shiftedVal;
     }
 
     // --- PART 2: Karatsuba Algorithm [cite: 42, 43] ---
@@ -95,7 +109,7 @@ public class Karatsuba {
         return result;
     }
 
-    // helper to randomly generate n digits
+    // Helper to randomly generate n digits
     public static BigInteger generateRandom(int n, Random r) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < n; i++) {
