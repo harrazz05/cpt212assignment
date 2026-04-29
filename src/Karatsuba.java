@@ -1,7 +1,6 @@
 import java.math.BigInteger;
 import java.util.Random;
 
-// Class name updated to match your filename Karatsuba.java
 public class Karatsuba {
 
     // Counter class to track primitive operations (assignment, addition, etc.) [cite: 34, 43]
@@ -83,7 +82,7 @@ public class Karatsuba {
         int m = (n / 2) + (n % 2);
         karatsubaCounter.add(2);
 
-        // Splitting logic using Base 10 as specified [cite: 10]
+        // Splitting logic using Base 10
         BigInteger powerOf10 = BigInteger.TEN.pow(m);
         BigInteger a = x.divide(powerOf10);
         BigInteger b = x.remainder(powerOf10);
@@ -97,11 +96,11 @@ public class Karatsuba {
         BigInteger z1 = mult(a.add(b), c.add(d));
         karatsubaCounter.add(3);
 
-        // Gauss trick to find middle term
+
         BigInteger middle = z1.subtract(z0).subtract(z2);
         karatsubaCounter.add(2);
 
-        // Combining the result
+        // combining the result
         BigInteger result = z0.multiply(BigInteger.TEN.pow(2 * m))
                 .add(middle.multiply(BigInteger.TEN.pow(m)))
                 .add(z2);
@@ -120,7 +119,7 @@ public class Karatsuba {
     }
 
     public static void main(String[] args) {
-        Random rand = new Random();
+        Random rand = new Random(42);
 
         // Test Part 1 requirements: Print steps for small numbers [cite: 12, 50]
         System.out.println("--- Part 1: Simple Multiplication (Step-by-Step) ---");
@@ -132,7 +131,7 @@ public class Karatsuba {
         System.out.println("\n--- Part 2: Experiment Data for Graphing ---");
         System.out.println("n\tSimple_Ops\tKaratsuba_Ops");
 
-        int[] testSizes = {10, 50, 100, 200, 500};
+        int[] testSizes = {10, 50, 100, 200, 500, 1000, 2000};
         for (int n : testSizes) {
             BigInteger a = generateRandom(n, rand);
             BigInteger b = generateRandom(n, rand);
