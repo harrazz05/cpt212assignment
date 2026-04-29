@@ -105,7 +105,7 @@ public class Karatsuba {
     }
 
     public static void main(String[] args) {
-        Random rand = new Random();
+        Random rand = new Random(42);
 
         // Test Part 1 requirements: Print steps for small numbers [cite: 12, 50]
         System.out.println("--- Part 1: Simple Multiplication (Step-by-Step) ---");
@@ -117,7 +117,7 @@ public class Karatsuba {
         System.out.println("\n--- Part 2: Experiment Data for Graphing ---");
         System.out.println("n\tSimple_Ops\tKaratsuba_Ops");
 
-        int[] testSizes = {10, 50, 100, 200, 500};
+        int[] testSizes = {10, 50, 100, 200, 500, 1000, 2000};
         for (int n : testSizes) {
             BigInteger a = generateRandom(n, rand);
             BigInteger b = generateRandom(n, rand);
