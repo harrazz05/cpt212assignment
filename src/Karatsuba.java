@@ -1,7 +1,6 @@
 import java.math.BigInteger;
 import java.util.Random;
 
-// Class name updated to match your filename Karatsuba.java
 public class Karatsuba {
 
     // Counter class to track primitive operations (assignment, addition, etc.) [cite: 34, 43]
@@ -45,9 +44,9 @@ public class Karatsuba {
             int shift = (n - 1 - i);
             BigInteger shiftedRow = partialRow.multiply(BigInteger.TEN.pow(shift));
             totalSum = totalSum.add(shiftedRow);
-            simpleCounter.add(3); // Shift + Addition assignments [cite: 34]
+            simpleCounter.add(3);
 
-            // Print partials and carriers for small numbers as required [cite: 12, 50]
+
             if (printSteps && n <= 10) {
                 System.out.println("Multiplier Digit " + digit2 + " | Partials: " + partialStr + " | Carriers: " + carrierStr);
             }
@@ -69,7 +68,7 @@ public class Karatsuba {
         int m = (n / 2) + (n % 2);
         karatsubaCounter.add(2);
 
-        // Splitting logic using Base 10 as specified [cite: 10]
+        // Splitting logic using Base 10
         BigInteger powerOf10 = BigInteger.TEN.pow(m);
         BigInteger a = x.divide(powerOf10);
         BigInteger b = x.remainder(powerOf10);
@@ -83,11 +82,11 @@ public class Karatsuba {
         BigInteger z1 = mult(a.add(b), c.add(d));
         karatsubaCounter.add(3);
 
-        // Gauss trick to find middle term
+
         BigInteger middle = z1.subtract(z0).subtract(z2);
         karatsubaCounter.add(2);
 
-        // Combining the result
+        // combining the result
         BigInteger result = z0.multiply(BigInteger.TEN.pow(2 * m))
                 .add(middle.multiply(BigInteger.TEN.pow(m)))
                 .add(z2);
@@ -96,7 +95,7 @@ public class Karatsuba {
         return result;
     }
 
-    // Helper to randomly generate n digits 
+    // helper to randomly generate n digits
     public static BigInteger generateRandom(int n, Random r) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < n; i++) {
